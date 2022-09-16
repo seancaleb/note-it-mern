@@ -1,8 +1,17 @@
+import { dependencies } from './package.json';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-
 import viteCompression from 'vite-plugin-compression';
+
+function renderChunks(deps: Record<string, string>) {
+    let chunks = {};
+    Object.keys(deps).forEach((key) => {
+        if (['react', 'react-router-dom', 'react-dom'].includes(key)) return;
+        chunks[key] = [key];
+    });
+    return chunks;
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -20,8 +29,18 @@ export default defineConfig({
                 __dirname,
                 './src/services/axios.config.ts'
             ),
-            "@/utils": path.resolve(__dirname, './src/shared/utils'),
-
+            '@/utils': path.resolve(__dirname, './src/shared/utils'),
+        },
+    },
+    build: {
+        sourcemap: false,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: ['react', 'react-router-dom', 'react-dom'],
+                    ...renderChunks(dependencies),
+                },
+            },
         },
     },
 });
