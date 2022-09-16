@@ -3,6 +3,7 @@ import token from '@/utils/token';
 import User, { UserDocument, Role } from '@/resources/user/user.interface';
 import { Types } from 'mongoose';
 import formatName from '@/utils/formatName';
+import TaskModel from '@/resources/task/task.model';
 
 export default class UserService {
     /**
@@ -98,6 +99,7 @@ export default class UserService {
      */
     public async delete(id: string): Promise<UserDocument> {
         try {
+            await TaskModel.deleteMany({ createdBy: id });
             const user = await UserModel.findByIdAndDelete(id).select(
                 '-password'
             );
@@ -115,6 +117,7 @@ export default class UserService {
      */
     public async deleteById(ids: string[]) {
         try {
+            await TaskModel.deleteMany({ createdBy: { $in: ids } });
             const deleted = await UserModel.deleteMany({ _id: { $in: ids } });
 
             return deleted;
