@@ -49,7 +49,7 @@ const Home = () => {
                         xs: 'none',
                         lg: 'block',
                     },
-                    backgroundImage: "url('../../bg-img.png')",
+                    backgroundImage: "url('../../bg-img.webp')",
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
