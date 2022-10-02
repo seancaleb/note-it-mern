@@ -23,7 +23,7 @@ const DeleteAllUserTasks = () => {
                     onClick={handleDeleteAllUserTasks}
                     loading={isLoading}
                     startIcon={<DeleteOutlinedIcon />}
-                    loadingPosition="end"
+                    loadingPosition="start"
                 >
                     Delete user tasks
                 </LoadingButton>
