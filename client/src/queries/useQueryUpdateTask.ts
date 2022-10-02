@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query';
 import client from '@/services';
-import Task, { Status } from '@/interfaces/task';
+import Task from '@/interfaces/task';
 import { useNotification } from '@/hooks';
 import axios, { AxiosError } from 'axios';
 import { retrieveErrorData } from '@/utils';
@@ -16,31 +16,28 @@ const handleUpdateTask = async ({
     status,
     token,
 }: MutationFnProps): Promise<Task> =>
-    await (
-        await client.patch(
-            `/task/${id}`,
-            { title, status },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        )
-    ).data;
+    await client<Task>({
+        options: {
+            url: `/task/${id}`,
+            method: 'patch',
+            data: { title, status },
+        },
+        token,
+    });
 
 const useQueryUpdateTask = ({ email, handleClose }: QueryProps) => {
     const { displayNotification } = useNotification();
     const queryClient = useQueryClient();
 
     return useMutation<Task, unknown, MutationFnProps>(handleUpdateTask, {
-        onSuccess: (task) => {
+        onSuccess: async () => {
             handleClose();
 
-            queryClient.invalidateQueries(`tasks-${email}`).then(() => {
-                displayNotification({
-                    type: 'success',
-                    message: 'Task has been updated',
-                });
+            await queryClient.invalidateQueries(['tasks', email]);
+
+            displayNotification({
+                type: 'success',
+                message: 'Task has been updated',
             });
         },
         onError: (e) => {

@@ -11,13 +11,12 @@ type Users = {
 };
 
 const handleGetUsers = async ({ token }: Token): Promise<Users> =>
-    await (
-        await client.get(`/user/all`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-    ).data;
+    await client<Users>({
+        options: {
+            url: '/user/all',
+        },
+        token,
+    });
 
 const useQueryGetUsers = ({ token }: Token) => {
     const { displayNotification } = useNotification();

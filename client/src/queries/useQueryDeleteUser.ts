@@ -15,23 +15,25 @@ type MutationFnProps = Id & Token;
 const handleDeleteUser = async ({
     id,
     token,
-}: MutationFnProps): Promise<User | APIDeleteResult> =>
-    typeof id === 'string'
-        ? await (
-              await client.delete(`/user/${id}`, {
-                  headers: {
-                      Authorization: `Bearer ${token}`,
-                  },
-              })
-          ).data
-        : await (
-              await client.delete(`/user`, {
-                  headers: {
-                      Authorization: `Bearer ${token}`,
-                  },
-                  data: { ids: id },
-              })
-          ).data;
+}: MutationFnProps): Promise<User | APIDeleteResult> => {
+    if (typeof id === 'string')
+        return await client<User | APIDeleteResult>({
+            options: {
+                url: `/user/${id}`,
+                method: 'delete',
+            },
+            token,
+        });
+    else
+        return await client<User | APIDeleteResult>({
+            options: {
+                url: '/user',
+                method: 'delete',
+                data: { ids: id },
+            },
+            token,
+        });
+};
 
 const useQueryDeleteUser = () => {
     const { displayNotification } = useNotification();
@@ -40,18 +42,18 @@ const useQueryDeleteUser = () => {
     return useMutation<User | APIDeleteResult, unknown, MutationFnProps>(
         handleDeleteUser,
         {
-            onSuccess: (user) => {
+            onSuccess: async (user) => {
                 const message = isSingleUser(user)
                     ? 'User has been deleted'
                     : `${
                           (user as APIDeleteResult).deleteResult.deletedCount
                       } users has been deleted`;
 
-                queryClient.invalidateQueries('users').then(() => {
-                    displayNotification({
-                        type: 'success',
-                        message,
-                    });
+                await queryClient.invalidateQueries('users');
+
+                displayNotification({
+                    type: 'success',
+                    message,
                 });
             },
             onError: (e) => {
@@ -70,6 +72,6 @@ const useQueryDeleteUser = () => {
 
 export default useQueryDeleteUser;
 
-function isSingleUser<T extends Object>(t: T) {
-    return t.hasOwnProperty('user');
+function isSingleUser<T extends Object>(obj: T) {
+    return obj.hasOwnProperty('user');
 }

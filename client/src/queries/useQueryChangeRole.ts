@@ -13,32 +13,27 @@ const handleChangeRole = async ({
     token,
     id,
 }: MutationFnProps): Promise<User> =>
-    await (
-        await client.post(
-            `/user/role/${id}`,
-            {
-                role,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        )
-    ).data;
+    await client<User>({
+        options: {
+            url: `/user/role/${id}`,
+            method: 'post',
+            data: { role },
+        },
+        token,
+    });
 
 const useQueryChangeRole = () => {
     const queryClient = useQueryClient();
     const { displayNotification } = useNotification();
 
     return useMutation<User, unknown, MutationFnProps>(handleChangeRole, {
-        onSuccess: (user) => {
-            queryClient.invalidateQueries('users').then(() =>
-                displayNotification({
-                    type: 'success',
-                    message: 'User role has been updated',
-                })
-            );
+        onSuccess: async () => {
+            await queryClient.invalidateQueries('users');
+
+            displayNotification({
+                type: 'success',
+                message: 'User role has been updated',
+            });
         },
         onError: (e) => {
             if (axios.isAxiosError(e)) {

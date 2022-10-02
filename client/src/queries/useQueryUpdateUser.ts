@@ -18,17 +18,14 @@ const handleUpdateUser = async ({
     token,
     ...args
 }: MutationFnProps): Promise<UpdatedUser> =>
-    await (
-        await client.patch(
-            '/user/update',
-            { ...args },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        )
-    ).data;
+    await client<UpdatedUser>({
+        options: {
+            url: '/user/update',
+            method: 'patch',
+            data: { ...args },
+        },
+        token,
+    });
 
 const useQueryUpdateUser = ({ handleClose }: QueryProps) => {
     const { displayNotification } = useNotification();

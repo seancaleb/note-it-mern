@@ -16,23 +16,25 @@ type MutationFnProps = Id & Token;
 const handleDeleteTask = async ({
     id,
     token,
-}: MutationFnProps): Promise<Task | APIDeleteResult> =>
-    typeof id === 'string'
-        ? await (
-              await client.delete(`/task/${id}`, {
-                  headers: {
-                      Authorization: `Bearer ${token}`,
-                  },
-              })
-          ).data
-        : await (
-              await client.delete(`/task`, {
-                  headers: {
-                      Authorization: `Bearer ${token}`,
-                  },
-                  data: { ids: id },
-              })
-          ).data;
+}: MutationFnProps): Promise<Task | APIDeleteResult> => {
+    if (typeof id === 'string')
+        return await client<Task | APIDeleteResult>({
+            options: {
+                url: `/task/${id}`,
+                method: 'delete',
+            },
+            token,
+        });
+    else
+        return await client<Task | APIDeleteResult>({
+            options: {
+                url: '/task',
+                method: 'delete',
+                data: { ids: id },
+            },
+            token,
+        });
+};
 
 const useQueryDeleteTask = ({ email }: Pick<UserPartial, 'email'>) => {
     const { displayNotification } = useNotification();
@@ -41,19 +43,19 @@ const useQueryDeleteTask = ({ email }: Pick<UserPartial, 'email'>) => {
     return useMutation<Task | APIDeleteResult, unknown, MutationFnProps>(
         handleDeleteTask,
         {
-            onSuccess: (task) => {
+            onSuccess: async (task) => {
                 const message = isSingleTask(task)
                     ? 'Task has been deleted'
                     : `${
                           (task as APIDeleteResult).deleteResult.deletedCount
                       } tasks has been deleted`;
 
-                queryClient.invalidateQueries(`tasks-${email}`).then(() =>
-                    displayNotification({
-                        type: 'success',
-                        message,
-                    })
-                );
+                await queryClient.invalidateQueries(['tasks', email]);
+
+                displayNotification({
+                    type: 'success',
+                    message,
+                });
             },
             onError: (e) => {
                 if (axios.isAxiosError(e)) {
@@ -71,6 +73,6 @@ const useQueryDeleteTask = ({ email }: Pick<UserPartial, 'email'>) => {
 
 export default useQueryDeleteTask;
 
-function isSingleTask<T extends Object>(t: T) {
-    return t.hasOwnProperty('task');
+function isSingleTask<T extends Object>(obj: T) {
+    return obj.hasOwnProperty('task');
 }

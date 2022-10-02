@@ -15,13 +15,12 @@ type Tasks = {
 type QueryProps = Token & Pick<UserPartial, 'email'>;
 
 const handleGetUserTasks = async ({ token }: Token): Promise<Tasks> =>
-    await (
-        await client.get(`/task`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-    ).data;
+    await client<Tasks>({
+        options: {
+            url: '/task',
+        },
+        token,
+    });
 
 const useQueryGetUserTasks = ({ token, email }: QueryProps) => {
     const { displayNotification } = useNotification();
@@ -30,7 +29,7 @@ const useQueryGetUserTasks = ({ token, email }: QueryProps) => {
     const { emptyTasks } = useTask();
 
     return useQuery<Tasks, unknown>(
-        `tasks-${email}`,
+        ['tasks', email],
         () => handleGetUserTasks({ token }),
         {
             retry: false,

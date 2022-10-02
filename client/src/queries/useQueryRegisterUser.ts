@@ -7,19 +7,15 @@ import { retrieveErrorData } from '@/utils';
 import { APIError } from '@/interfaces/api';
 
 const handleRegisterUser = async ({
-    firstName,
-    lastName,
-    email,
-    password,
+    ...args
 }: RegisterUser): Promise<NonNullableToken> =>
-    await (
-        await client.post(`/user/register`, {
-            firstName,
-            lastName,
-            email,
-            password,
-        })
-    ).data;
+    await client<NonNullableToken>({
+        options: {
+            url: '/user/register',
+            method: 'post',
+            data: { ...args },
+        },
+    });
 
 const useQueryRegisterUser = () => {
     const { displayNotification } = useNotification();
@@ -28,17 +24,13 @@ const useQueryRegisterUser = () => {
     return useMutation<NonNullableToken, unknown, RegisterUser>(
         handleRegisterUser,
         {
-            onSuccess: (data) => {
-                const { token } = data;
+            onSuccess: async () => {
+                await queryClient.invalidateQueries('users');
 
-                if (token) {
-                    displayNotification({
-                        type: 'info',
-                        message: 'Registered successfully',
-                    });
-
-                    queryClient.invalidateQueries('users');
-                }
+                displayNotification({
+                    type: 'info',
+                    message: 'Registered successfully',
+                });
             },
             onError: (e) => {
                 if (axios.isAxiosError(e)) {

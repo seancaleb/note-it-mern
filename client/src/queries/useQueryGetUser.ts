@@ -12,19 +12,18 @@ type UserProfile = {
 type QueryProps = Token & Pick<UserPartial, 'email'>;
 
 const handleGetUser = async ({ token }: Token): Promise<UserProfile> =>
-    await (
-        await client.get('/user', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-    ).data;
+    await client<UserProfile>({
+        options: {
+            url: '/user',
+        },
+        token,
+    });
 
 const useQueryGetUser = ({ token, email }: QueryProps) => {
     const { displayNotification } = useNotification();
 
     return useQuery<UserProfile, unknown>(
-        ['user-profile', email],
+        ['users', email],
         () => handleGetUser({ token }),
         {
             retry: false,

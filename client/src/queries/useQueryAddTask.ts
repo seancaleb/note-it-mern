@@ -7,7 +7,6 @@ import { retrieveErrorData } from '@/utils';
 import { Token, UserPartial } from '@/interfaces/user';
 import { APIError } from '@/interfaces/api';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 
 type MutationFnProps = Pick<Task, 'title' | 'status'> & Token;
 type QueryProps = Pick<UserPartial, 'email'> & { handleClose: () => void };
@@ -17,17 +16,14 @@ const handleAddTask = async ({
     status,
     token,
 }: MutationFnProps): Promise<Task> =>
-    await (
-        await client.post(
-            '/task',
-            { title, status },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        )
-    ).data;
+    await client<Task>({
+        options: {
+            url: '/task',
+            method: 'post',
+            data: { title, status },
+        },
+        token,
+    });
 
 const useQueryAddTask = ({ email, handleClose }: QueryProps) => {
     const { displayNotification } = useNotification();
@@ -35,18 +31,18 @@ const useQueryAddTask = ({ email, handleClose }: QueryProps) => {
     const navigate = useNavigate();
 
     return useMutation<Task, unknown, MutationFnProps>(handleAddTask, {
-        onSuccess: (task) => {
+        onSuccess: async () => {
             location.pathname !== '/dashboard/tasks'
                 ? navigate('/dashboard/tasks')
                 : null;
 
             handleClose();
 
-            queryClient.invalidateQueries(`tasks-${email}`).then(() => {
-                displayNotification({
-                    type: 'success',
-                    message: 'Task has been added',
-                });
+            await queryClient.invalidateQueries(['tasks', email]);
+
+            displayNotification({
+                type: 'success',
+                message: 'Task has been added',
             });
         },
         onError: (e) => {

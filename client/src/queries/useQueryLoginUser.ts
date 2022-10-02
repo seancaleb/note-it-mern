@@ -1,7 +1,7 @@
 import { useMutation } from 'react-query';
 import client from '@/services';
 import jwt_decode from 'jwt-decode';
-import User, { NonNullableToken, LoginUser, Password } from '@/interfaces/user';
+import User, { NonNullableToken, LoginUser } from '@/interfaces/user';
 import { useUser, useNotification } from '@/hooks';
 import { useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
@@ -12,9 +12,13 @@ const handleLoginUser = async ({
     email,
     password,
 }: LoginUser): Promise<NonNullableToken> =>
-    await (
-        await client.post('/user/login', { email, password })
-    ).data;
+    await client<NonNullableToken>({
+        options: {
+            url: '/user/login',
+            method: 'post',
+            data: { email, password },
+        },
+    });
 
 const useQueryLoginUser = () => {
     const { loginUser } = useUser();

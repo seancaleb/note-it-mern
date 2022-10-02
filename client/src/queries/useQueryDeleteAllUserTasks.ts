@@ -12,13 +12,13 @@ type QueryProps = Pick<UserPartial, 'email'>;
 const handleDeleteAllUserTasks = async ({
     token,
 }: MutationFnProps): Promise<APIDeleteResult> =>
-    await (
-        await client.delete(`/task/users/all`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-    ).data;
+    await client<APIDeleteResult>({
+        options: {
+            url: '/task/users/all',
+            method: 'delete',
+        },
+        token,
+    });
 
 const useQueryDeleteAllUserTasks = ({ email }: QueryProps) => {
     const { displayNotification } = useNotification();
@@ -27,17 +27,17 @@ const useQueryDeleteAllUserTasks = ({ email }: QueryProps) => {
     return useMutation<APIDeleteResult, unknown, MutationFnProps>(
         handleDeleteAllUserTasks,
         {
-            onSuccess: (task) => {
+            onSuccess: async (task) => {
                 const deleteCount = task.deleteResult.deletedCount;
 
-                queryClient.invalidateQueries(`tasks-${email}`).then(() =>
-                    displayNotification({
-                        type: 'success',
-                        message: `All tasks has been deleted ${
-                            deleteCount === 0 ? '' : `(${deleteCount})`
-                        }`,
-                    })
-                );
+                await queryClient.invalidateQueries(['tasks', email]);
+
+                displayNotification({
+                    type: 'success',
+                    message: `All tasks has been deleted ${
+                        deleteCount === 0 ? '' : `(${deleteCount})`
+                    }`,
+                });
             },
             onError: (e) => {
                 if (axios.isAxiosError(e)) {
