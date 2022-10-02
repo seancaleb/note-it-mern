@@ -7,5 +7,5 @@ export default SidePanel;
 export interface SidePanelMenu {
     id: string;
     name: 'Dashboard' | 'Tasks' | 'Users';
-    icon: JSX.Element;
+    icon: ({ color }: { color: any }) => JSX.Element;
 }

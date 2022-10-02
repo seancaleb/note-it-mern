@@ -25,6 +25,13 @@ const DashboardHeading = ({ title }: DashboardHeadingProps) => {
                     xs: 'stretch',
                     sm: 'center',
                 },
+                background: 'white',
+                borderRadius: 1,
+                px: {
+                    xs: 2,
+                    md: 3,
+                },
+                py: 3,
             }}
             spacing={2}
         >

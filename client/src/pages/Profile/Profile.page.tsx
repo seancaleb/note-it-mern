@@ -13,11 +13,12 @@ const Profile = () => {
                     height: 'auto',
                     width: '100%',
                     px: {
-                        xs: 3,
-                        md: 4,
+                        xs: 2,
+                        md: 3,
                     },
                     py: 4,
                 }}
+                elevation={0}
             >
                 <EditProfile />
             </Paper>

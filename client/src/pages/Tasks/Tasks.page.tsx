@@ -39,7 +39,7 @@ const Dashboard = () => {
             gridAutoRows="auto 1fr"
         >
             <Grid item xs={12}>
-                <Paper sx={{ maxWidth: width }} elevation={1}>
+                <Paper sx={{ maxWidth: width }} elevation={0}>
                     <Tabs
                         value={value}
                         onChange={handleChange}

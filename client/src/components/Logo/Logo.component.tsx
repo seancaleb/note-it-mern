@@ -13,9 +13,9 @@ const Logo = ({ isAbsolute = false }: LogoProps) => {
     return (
         <Stack
             direction="row"
-            spacing={1}
+            spacing={1.5}
             sx={{
-                color: 'primary.main',
+                color: 'primary.200',
                 position: isAbsolute ? 'absolute' : 'relative',
                 top: isAbsolute ? 32 : 'unset',
                 left: isAbsolute ? 32 : 'unset',
@@ -27,9 +27,9 @@ const Logo = ({ isAbsolute = false }: LogoProps) => {
                 variant="h6"
                 component="div"
                 sx={{
-                    color: 'primary.main',
-                    fontWeight: '600',
-                    fontSize: matches ? '20px' : '18px',
+                    color: isAbsolute ? 'primary.main' : 'white',
+                    fontWeight: isAbsolute ? '600' : '500',
+                    fontSize: '18px',
                 }}
             >
                 NoteIT

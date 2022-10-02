@@ -1,4 +1,3 @@
-import Button from '@mui/material/Button';
 import { useQueryDeleteAllUserTasks } from '@/queries';
 import { useUser } from '@/hooks';
 import { LoadingButton } from '@mui/lab';
@@ -20,14 +19,13 @@ const DeleteAllUserTasks = () => {
                 <LoadingButton
                     color="error"
                     variant="outlined"
-                    size="medium"
                     sx={{ textTransform: 'uppercase' }}
                     onClick={handleDeleteAllUserTasks}
                     loading={isLoading}
-                    endIcon={<DeleteOutlinedIcon />}
+                    startIcon={<DeleteOutlinedIcon />}
                     loadingPosition="end"
                 >
-                    Delete all user tasks
+                    Delete user tasks
                 </LoadingButton>
             ) : null}
         </>

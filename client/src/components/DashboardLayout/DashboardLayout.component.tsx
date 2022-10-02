@@ -16,7 +16,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     return (
         <Container>
             {/* Navigation bar  */}
-            <NavBar />
 
             {/* Dashboard Body  */}
             <Layout>
@@ -26,6 +25,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 {/* Column 2 - Dashboard Content  */}
                 <Box sx={{ flexGrow: 1 }}>
                     <Body>
+                        <NavBar />
                         {/* Content of each dasboard page will be placed here  */}
                         {children}
                     </Body>
@@ -43,16 +43,13 @@ export default DashboardLayout;
 const Container = styled(Box)(({ theme }) =>
     sx({
         minHeight: '100vh',
-        bgcolor: 'rgba(40, 53, 147, .03)',
+        bgcolor: 'primary.50',
+        // bgColor: 'rgba(40, 53, 147, .03)'
     })
 );
 
 const Layout = styled(Stack)(({ theme }) =>
     sx({
-        paddingTop: {
-            xs: '56px',
-            sm: '64px',
-        },
         minHeight: '100vh',
         flexDirection: 'row',
     })
@@ -60,16 +57,12 @@ const Layout = styled(Stack)(({ theme }) =>
 
 const Body = styled(Stack)(({ theme }) =>
     sx({
-        pt: { xs: '60px', lg: '76px' },
-        py: theme.spacing(3),
+        pt: 3,
+        gap: theme.spacing(2),
         px: {
             xs: '16px',
             sm: '32px',
         },
         height: '100%',
-        gap: {
-            xs: theme.spacing(2),
-            lg: theme.spacing(3),
-        },
     })
 );

@@ -9,7 +9,7 @@ type SidePanelButtonProps = {
 };
 
 const SidePanelButton = ({ menu, handleNavigate }: SidePanelButtonProps) => {
-    const { id, name, icon } = menu;
+    const { id, name, icon: Icon } = menu;
 
     return (
         <Button
@@ -19,20 +19,34 @@ const SidePanelButton = ({ menu, handleNavigate }: SidePanelButtonProps) => {
                 px: 'unset',
                 py: 'unset',
                 minWidth: 'unset',
+                backgroundColor:
+                    location.pathname === '/' + name.toLocaleLowerCase() ||
+                    location.pathname ===
+                        '/dashboard/' + name.toLocaleLowerCase()
+                        ? 'primary.dark'
+                        : 'none',
+                '&:hover': {
+                    backgroundColor:
+                        location.pathname === '/' + name.toLocaleLowerCase() ||
+                        location.pathname ===
+                            '/dashboard/' + name.toLocaleLowerCase()
+                            ? 'primary.dark'
+                            : 'none',
+                },
+                borderRadius: 0,
             }}
+            disableRipple
+            disableTouchRipple
         >
             <Stack
                 onClick={() => handleNavigate(name)}
                 direction="row"
-                spacing={3}
+                spacing={2.5}
                 sx={{
+                    py: '12px',
                     px: {
                         xs: 'unset',
-                        md: '32px',
-                    },
-                    py: {
-                        xs: '8px',
-                        md: '12px',
+                        md: 3,
                     },
                     justifyContent: {
                         xs: 'center',
@@ -42,17 +56,26 @@ const SidePanelButton = ({ menu, handleNavigate }: SidePanelButtonProps) => {
                     alignItems: 'center',
                 }}
             >
-                {icon}
+                <Icon
+                    color={
+                        location.pathname === '/' + name.toLocaleLowerCase() ||
+                        location.pathname ===
+                            '/dashboard/' + name.toLocaleLowerCase()
+                            ? 'white'
+                            : 'white'
+                    }
+                />
                 <Typography
                     variant="subtitle1"
                     sx={{
+                        fontSize: '14px',
                         color:
                             location.pathname ===
                                 '/' + name.toLocaleLowerCase() ||
                             location.pathname ===
                                 '/dashboard/' + name.toLocaleLowerCase()
-                                ? 'primary.main'
-                                : 'text.primary',
+                                ? 'white'
+                                : 'white',
                         display: {
                             xs: 'none',
                             md: 'block',

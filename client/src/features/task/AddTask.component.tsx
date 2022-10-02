@@ -48,10 +48,6 @@ const AddTask = ({ open, handleClose }: AddTaskProps) => {
             <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
                 <DialogTitle>New task</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        Please enter your new task for today
-                    </DialogContentText>
-
                     <Stack
                         spacing={2}
                         direction={matches ? 'row' : 'column'}

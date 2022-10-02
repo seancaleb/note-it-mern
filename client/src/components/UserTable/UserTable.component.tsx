@@ -68,7 +68,7 @@ const UserTable = () => {
                     width: '100%',
                     mb: 2,
                 }}
-                elevation={1}
+                elevation={0}
             >
                 <UserTableToolbar
                     numSelected={selected.length}
@@ -129,7 +129,9 @@ function Row({ row, handleClick, isItemSelected, labelId }: RowProps) {
             aria-checked={isItemSelected}
             tabIndex={-1}
             selected={isItemSelected}
-            sx={{ cursor: 'pointer' }}
+            sx={{
+                cursor: 'pointer',
+            }}
         >
             <TableCell padding="checkbox">
                 <Checkbox

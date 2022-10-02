@@ -34,7 +34,7 @@ const EditProfile = () => {
                 item
                 sx={{
                     gridColumn: {
-                        xs: 'span 6',
+                        xs: 'span 12',
                         sm: 'span 8',
                     },
                 }}
@@ -89,24 +89,29 @@ const EditProfile = () => {
                 </Stack>
             </Grid>
 
-            <Grid
-                item
-                sx={{
-                    gridColumn: {
-                        xs: 'span 6',
-                        sm: 'span 4',
-                    },
-                    justifySelf: 'flex-end',
-                }}
-            >
-                <Button
-                    variant="outlined"
-                    onClick={handleOpen}
-                    disabled={open === true}
+            {!open ? (
+                <Grid
+                    item
+                    sx={{
+                        gridColumn: {
+                            xs: 'span 12',
+                            sm: 'span 4',
+                        },
+                        justifySelf: {
+                            xs: 'stretch',
+                            sm: 'flex-end',
+                        },
+                    }}
                 >
-                    Edit Profile
-                </Button>
-            </Grid>
+                    <Button
+                        variant="outlined"
+                        onClick={handleOpen}
+                        sx={{ width: '100%' }}
+                    >
+                        Edit Profile
+                    </Button>{' '}
+                </Grid>
+            ) : null}
 
             {!matches ? (
                 <Grid

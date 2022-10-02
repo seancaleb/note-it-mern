@@ -146,9 +146,17 @@ const GridItem = styled(Grid)(({ theme }) =>
     })
 );
 
-const StackFormButtons = styled(Stack)(({ theme }) => ({
-    flexDirection: 'row',
-    gap: theme.spacing(2),
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-}));
+const StackFormButtons = styled(Stack)(({ theme }) =>
+    sx({
+        flexDirection: {
+            xs: 'column',
+            sm: 'row',
+        },
+        gap: theme.spacing(2),
+        alignItems: {
+            xs: 'stretch',
+            sm: 'center',
+        },
+        justifyContent: 'flex-end',
+    })
+);

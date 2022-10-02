@@ -13,11 +13,13 @@ import AddIcon from '@mui/icons-material/Add';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { SidePanelMenu, SidePanelButton } from '@/components/SidePanel';
+
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import { AddTask } from '@/features/task';
 import { useUser } from '@/hooks';
+import Logo from '@/components/Logo';
 
 const SidePanel = () => {
     const matches = useMediaQuery('(min-width: 900px)');
@@ -39,27 +41,39 @@ const SidePanel = () => {
         <Paper
             elevation={1}
             sx={{
-                bgcolor: 'white',
+                position: 'relative',
+                bgcolor: 'primary.main',
                 width: '100%',
                 minWidth: {
                     xs: 56,
                     sm: 64,
                     md: 256,
-                    lg: 324,
+                    lg: 276,
                 },
                 maxWidth: {
                     xs: 56,
                     sm: 64,
                     md: 256,
-                    lg: 324,
+                    lg: 276,
                 },
-                paddingTop: '60px',
                 paddingBottom: '24px',
+                pt: matches ? 0 : 3,
                 display: 'flex',
                 flexDirection: 'column',
                 borderRadius: 'unset',
             }}
         >
+            <Box
+                px={3}
+                sx={{
+                    minHeight: '90px',
+                    display: matches ? 'flex' : 'none',
+                    alignItems: 'center',
+                }}
+            >
+                <Logo />
+            </Box>
+
             <Stack spacing={{ xs: 2, md: 0 }}>
                 {/* Display side panel menu button list  */}
                 {menus.map((menu) => {
@@ -77,8 +91,11 @@ const SidePanel = () => {
             </Stack>
 
             <Stack
-                px={{ xs: 'unset', md: 4 }}
                 mt={{ xs: '16px', md: '32px' }}
+                px={{
+                    xs: 'unset',
+                    md: 3,
+                }}
                 sx={{
                     justifyContent: 'space-between',
                     flexGrow: 1,
@@ -89,8 +106,12 @@ const SidePanel = () => {
                         <Button
                             fullWidth
                             variant="contained"
+                            color="success"
                             startIcon={<AddIcon />}
                             onClick={handleOpen}
+                            sx={{
+                                textTransform: 'uppercase',
+                            }}
                         >
                             New task
                         </Button>
@@ -98,7 +119,8 @@ const SidePanel = () => {
                         <Typography
                             variant="overline"
                             sx={{
-                                color: '#757575',
+                                color: 'white',
+                                opacity: 0.5,
                                 fontSize: '10px',
                                 fontWeight: '500',
                             }}
@@ -111,7 +133,7 @@ const SidePanel = () => {
                         <IconButton onClick={handleOpen}>
                             <AddIcon
                                 sx={{
-                                    color: 'primary.light',
+                                    color: 'white',
                                 }}
                                 fontSize="medium"
                             />
@@ -131,20 +153,22 @@ const menus: SidePanelMenu[] = [
     {
         id: nanoid(),
         name: 'Dashboard',
-        icon: (
-            <DashboardIcon sx={{ color: 'primary.light' }} fontSize="medium" />
-        ),
+        icon: ({ color }) => {
+            return <DashboardIcon sx={{ color, fontSize: '18px' }} />;
+        },
     },
     {
         id: nanoid(),
         name: 'Tasks',
-        icon: <TaskIcon sx={{ color: 'primary.light' }} fontSize="medium" />,
+        icon: ({ color }) => {
+            return <TaskIcon sx={{ color, fontSize: '18px' }} />;
+        },
     },
     {
         id: nanoid(),
         name: 'Users',
-        icon: (
-            <PeopleAltIcon sx={{ color: 'primary.light' }} fontSize="medium" />
-        ),
+        icon: ({ color }) => {
+            return <PeopleAltIcon sx={{ color, fontSize: '18px' }} />;
+        },
     },
 ];

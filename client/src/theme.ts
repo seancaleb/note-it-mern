@@ -11,8 +11,15 @@ const theme = createTheme({
     },
     palette: {
         primary: {
-            main: colors.indigo[800],
-            A700: colors.indigo.A700,
+            main: colors.indigo[900],
+            50: colors.indigo[50],
+            200: colors.indigo[200],
+            500: colors.indigo[500],
+            800: colors.indigo[800],
+        },
+
+        success: {
+            main: colors.indigo[50],
         },
     },
     components: {

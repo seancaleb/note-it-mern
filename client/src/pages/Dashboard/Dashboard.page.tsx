@@ -69,6 +69,7 @@ function StatusView({ title, count }: StatusCount) {
                         borderLeft: '3px solid',
                         borderColor: 'primary.light',
                     }}
+                    elevation={0}
                 >
                     <Typography
                         variant="overline"

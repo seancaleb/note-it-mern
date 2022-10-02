@@ -76,7 +76,7 @@ const TaskTable = ({ status }: TaskTableProps) => {
                     width: '100%',
                     mb: 2,
                 }}
-                elevation={1}
+                elevation={0}
             >
                 <TaskTableToolbar
                     numSelected={selected?.length}
