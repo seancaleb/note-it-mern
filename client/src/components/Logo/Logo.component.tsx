@@ -15,7 +15,7 @@ const Logo = ({ isAbsolute = false }: LogoProps) => {
             direction="row"
             spacing={1.5}
             sx={{
-                color: 'primary.200',
+                color: isAbsolute ? 'primary.main' : 'primary.200',
                 position: isAbsolute ? 'absolute' : 'relative',
                 top: isAbsolute ? 32 : 'unset',
                 left: isAbsolute ? 32 : 'unset',
