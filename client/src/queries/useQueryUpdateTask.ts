@@ -44,6 +44,9 @@ const useQueryUpdateTask = ({ email, handleClose }: QueryProps) => {
             if (axios.isAxiosError(e)) {
                 const error = e as AxiosError<APIError>;
                 const { message } = retrieveErrorData<APIError>({ error });
+
+                handleClose();
+
                 displayNotification({
                     type: 'error',
                     message: message ? message : 'Something went wrong',
