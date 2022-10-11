@@ -58,7 +58,7 @@ function StatusView({ title, count }: StatusCount) {
             }}
         >
             {tasks === null ? (
-                <Skeleton animation={false} />
+                <Skeleton animation="wave" height="3em" />
             ) : (
                 <Paper
                     sx={{
