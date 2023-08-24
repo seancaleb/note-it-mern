@@ -44,7 +44,7 @@ export default class UserController implements Controller {
         );
 
         this.router.patch(
-            `${this.path}`,
+            `${this.path}/update`,
             authenticated,
             validationMiddleware(validate.update),
             this.update
