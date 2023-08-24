@@ -45,12 +45,12 @@ export default class TaskController implements Controller {
         );
 
         this.router.delete(`${this.path}/:id`, authenticated, this.delete);
-        this.router.delete(`${this.path}`, authenticated, this.deleteById);
+        this.router.delete(`${this.path}`, authenticated, this.deleteByIds);
         this.router.delete(
             `${this.path}/users/all`,
             authenticated,
             admin,
-            this.deleteAllUsers
+            this.deleteAllUserTasks
         );
     }
 
@@ -178,9 +178,9 @@ export default class TaskController implements Controller {
     };
 
     /**
-     * DELETE TASKS BY ID
+     * DELETE MULTIPLE TASKS BY IDS
      */
-    private deleteById = async (
+    private deleteByIds = async (
         req: Request<{}, {}, { ids: string[] }>,
         res: Response,
         next: NextFunction
@@ -199,13 +199,14 @@ export default class TaskController implements Controller {
     /**
      * DELETE ALL TASKS OF ALL USERS
      */
-    private deleteAllUsers = async (
+    private deleteAllUserTasks = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const deleteResult = await this.TaskService.deleteAll();
+            const { user } = req;
+            const deleteResult = await this.TaskService.deleteAll(user._id);
 
             res.status(200).json({ deleteResult });
         } catch (error) {

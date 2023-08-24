@@ -39,7 +39,7 @@ export default class App {
             try {
                 if (process.env.NODE_ENV === 'development') {
                     // This will use the local mongo path (ex. URI in MongoDB Compass )
-                    await mongoose.connect(`${MONGO_PATH}/taskDB`);
+                    await mongoose.connect(`${MONGO_PATH}/taskDb`);
 
                     console.log('(Development) Connected to the database...');
                 } else {

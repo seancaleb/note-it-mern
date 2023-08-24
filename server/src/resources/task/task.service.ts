@@ -1,6 +1,7 @@
 import TaskModel from '@/resources/task/task.model';
 import UserModel from '@/resources/user/user.model';
 import Task, { TaskDocument } from '@/resources/task/task.interface';
+import { Types } from 'mongoose';
 
 export default class TaskService {
     /**
@@ -130,9 +131,11 @@ export default class TaskService {
     /**
      * DELETE ALL TASKS OF ALL USERS
      */
-    public async deleteAll() {
+    public async deleteAll(id: typeof Types.ObjectId) {
         try {
-            const tasks = await TaskModel.deleteMany({});
+            const tasks = await TaskModel.deleteMany({
+                createdBy: { $ne: id },
+            });
 
             return tasks;
         } catch (error) {
